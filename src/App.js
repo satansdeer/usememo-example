@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useMemo } from "react";
 
 function App() {
+  const [fibLength, setFibLength] = useState(3);
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  const fibonacciSequence = useMemo(() => {
+    const t1 = performance.now();
+    const result = [1, 1];
+    for (let i = 2; i < fibLength; i++) {
+      result[i] = result[i - 1] + result[i - 2];
+    }
+    const t2 = performance.now();
+    console.log(`Fibonacci calculation took ${t2 - t1}ms`);
+    return result;
+  }, [fibLength]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button onClick={increment}>{count}</button>
+      <hr />
+      <input
+        value={fibLength}
+        onChange={(e) => setFibLength(Number(e.target.value))}
+      />
+      <p>
+        Fibonacci sequence of length {fibLength}: {fibonacciSequence.join(", ")}
+      </p>
+    </>
   );
 }
-
 export default App;
